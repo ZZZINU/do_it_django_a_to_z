@@ -246,12 +246,17 @@ class TestView(TestCase):
         main_area = soup.find('div', id='main-area')
         self.assertIn('Edit Post', main_area.text)
 
+        tag_str_input = main_area.find('input', id='id_tags_str')
+        self.assertTrue(tag_str_input)
+        self.assertIn('파이썬 공부; python', tag_str_input.attrs['value'])
+        
         response = self.client.post(
             update_post_url,
             {
                 'title': '세 번째 포스트를 수정했습니다. ',
                 'content': '안녕 세계? 우리는 하나!',
-                'category': self.category_music.pk
+                'category': self.category_music.pk,
+                'tags_str': '파이썬 공부; 한글 태그, some tag'
             },
             follow=True
         )
